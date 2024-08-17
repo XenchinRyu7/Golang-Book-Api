@@ -28,7 +28,7 @@ Before you start, ensure you have the following installed on your machine:
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/yourusername/golang-book-api.git
+   https://github.com/XenchinRyu7/Golang-Book-Api.git
    cd golang-book-api
 2. install the dependencies "$go mod tidy"
    
