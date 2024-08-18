@@ -8,7 +8,6 @@ import (
 func APIKeyAuthMiddleware(apiKeyRepo *repository.APIKeyRepository) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			// Pengecualian untuk route /get-api-key
 			if r.URL.Path == "/get-api-key" {
 				next.ServeHTTP(w, r)
 				return

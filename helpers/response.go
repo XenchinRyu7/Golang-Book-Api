@@ -1,17 +1,21 @@
 package helpers
 
 import (
-    "encoding/json"
-    "net/http"
+	"encoding/json"
+	"net/http"
 )
 
 func RespondJSON(w http.ResponseWriter, status int, payload interface{}) {
-    response, _ := json.Marshal(payload)
-    w.Header().Set("Content-Type", "application/json")
-    w.WriteHeader(status)
-    w.Write(response)
+	response, _ := json.Marshal(payload)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(status)
+	w.Write(response)
+}
+
+func RespondSuccess(w http.ResponseWriter, status int, message string) {
+	RespondJSON(w, status, map[string]string{"message": message})
 }
 
 func RespondError(w http.ResponseWriter, status int, message string) {
-    RespondJSON(w, status, map[string]string{"error": message})
+	RespondJSON(w, status, map[string]string{"error": message})
 }

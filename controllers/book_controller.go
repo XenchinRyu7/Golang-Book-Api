@@ -48,12 +48,18 @@ func (bc *BookController) CreateBook(w http.ResponseWriter, r *http.Request) {
 		helpers.RespondError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
-	helpers.RespondJSON(w, http.StatusCreated, book)
+	// helpers.RespondJSON(w, http.StatusCreated, book) respon with object
+	helpers.RespondSuccess(w, http.StatusCreated, "Book created successfully")
 }
 
 func (bc *BookController) UpdateBook(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	id, _ := strconv.Atoi(vars["id"])
+	id, err := strconv.Atoi(vars["id"])
+
+	if err != nil {
+		helpers.RespondError(w, http.StatusBadRequest, "Invalid Book Id")
+		return
+	}
 
 	var book models.Book
 	if err := json.NewDecoder(r.Body).Decode(&book); err != nil {
@@ -62,20 +68,40 @@ func (bc *BookController) UpdateBook(w http.ResponseWriter, r *http.Request) {
 	}
 	book.ID = id
 
-	if err := bc.Service.UpdateBook(book); err != nil {
-		helpers.RespondError(w, http.StatusInternalServerError, err.Error())
+	err = bc.Service.UpdateBook(book, id)
+	if err != nil {
+		if err.Error() == "book not found" {
+			helpers.RespondError(w, http.StatusNotFound, "Book not found")
+			return
+		}
+		helpers.RespondError(w, http.StatusInternalServerError, "Could not update book")
 		return
 	}
-	helpers.RespondJSON(w, http.StatusOK, book)
+
+	// helpers.RespondJSON(w, http.StatusOK, book)
+	helpers.RespondSuccess(w, http.StatusCreated, "Book updated successfully")
+
 }
 
 func (bc *BookController) DeleteBook(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	id, _ := strconv.Atoi(vars["id"])
+	id, err := strconv.Atoi(vars["id"])
 
-	if err := bc.Service.DeleteBook(id); err != nil {
-		helpers.RespondError(w, http.StatusInternalServerError, err.Error())
+	if err != nil {
+		helpers.RespondError(w, http.StatusBadRequest, "Invalid Book Id")
 		return
 	}
-	helpers.RespondJSON(w, http.StatusNoContent, nil)
+
+	err = bc.Service.DeleteBook(id)
+	if err != nil {
+		if err.Error() == "book not found" {
+			helpers.RespondError(w, http.StatusNotFound, "Book not found")
+			return
+		}
+		helpers.RespondError(w, http.StatusInternalServerError, "Could not delete book")
+		return
+	}
+
+	// helpers.RespondJSON(w, http.StatusNoContent, nil)
+	helpers.RespondSuccess(w, http.StatusOK, "Book deleted successfully")
 }
