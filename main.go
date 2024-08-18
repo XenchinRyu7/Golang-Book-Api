@@ -1,17 +1,18 @@
 package main
 
 import (
+	"database/sql"
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/mysql"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"golang-book-api/config"
 	"golang-book-api/controllers"
+	// "golang-book-api/middleware"
 	"golang-book-api/repository"
 	"golang-book-api/router"
 	"golang-book-api/services"
 	"log"
 	"net/http"
-	"database/sql"
 )
 
 func seedData(db *sql.DB) {
@@ -34,11 +35,15 @@ func main() {
 	defer db.Close()
 
 	bookRepo := repository.NewBookRepository(db)
+	apiKeyRepo := repository.NewAPIKeyRepository(db)
+
 	bookService := services.NewBookService(bookRepo)
+	apiKeyService := services.NewAPIKeyService(apiKeyRepo)
+
 	bookController := controllers.NewBookController(bookService)
+	apiKeyController := controllers.NewAPIKeyController(apiKeyService)
 
-	r := router.SetupRouter(bookController)
-
+	// Migrate Database
 	driver, err := mysql.WithInstance(db, &mysql.Config{})
 	if err != nil {
 		log.Fatal("Could not create migration driver", err)
@@ -55,9 +60,12 @@ func main() {
 		log.Fatal("Could not apply migration", err)
 	}
 
+	// Seed Data
 	seedData(db)
 
-	log.Println("Migration applied successfully")
+	// Setup Router
+	r := router.SetupRouter(bookController, apiKeyController, apiKeyRepo)
+
 	log.Println("Server is running on port 8080")
 	http.ListenAndServe(":8080", r)
 }

@@ -15,7 +15,7 @@ type BookRepository interface {
 
 type bookRepository struct {
 	db *sql.DB
-}
+}	
 
 func NewBookRepository(db *sql.DB) BookRepository {
 	return &bookRepository{db}
