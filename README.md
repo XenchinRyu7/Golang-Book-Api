@@ -20,7 +20,7 @@ This is a simple CRUD API built with Go for managing books data. The API allows 
 Before you start, ensure you have the following installed on your machine:
 
 - Go 1.20+
-- SQL Database (MySQL, PostgreSQL, or SQLite)
+- SQL Database (MySQL)
 - Git
 
 ## Installation
@@ -30,6 +30,7 @@ Before you start, ensure you have the following installed on your machine:
    ```bash
    https://github.com/XenchinRyu7/Golang-Book-Api.git
    cd golang-book-api
+
 2. install the dependencies "$go mod tidy"
    
 ## Database Setup, 
@@ -38,16 +39,13 @@ Before you start, ensure you have the following installed on your machine:
 3. go run main.go seed
 
 ## Running The Project
-go run main.go
+   ```bash
+   go run main.go
 
 ## API Endpoints
 Here are the available API endpoints:
-
-GET /books: List all books
-GET /books/
-: Get a book by ID
-POST /books: Create a new book
-PUT /books/
-: Update a book by ID
-DELETE /books/
-: Delete a book by ID
+1. GET /books: List all books
+2. GET /books/ : Get a book by ID
+3. POST /books : Create a new book
+4. PUT /books/ : Update a book by ID
+5. DELETE /books/ : Delete a book by ID
