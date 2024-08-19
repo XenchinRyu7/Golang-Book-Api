@@ -1,15 +1,15 @@
 package controllers
 
 import (
-	"golang-book-api/services" // Import services
+	"golang-book-api/services"
 	"net/http"
 )
 
 type APIKeyController struct {
-	APIKeyService *services.APIKeyService
+	APIKeyService services.APIKeyServiceInterface
 }
 
-func NewAPIKeyController(apiKeyService *services.APIKeyService) *APIKeyController {
+func NewAPIKeyController(apiKeyService services.APIKeyServiceInterface) *APIKeyController {
 	return &APIKeyController{APIKeyService: apiKeyService}
 }
 

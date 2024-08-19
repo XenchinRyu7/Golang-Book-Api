@@ -6,6 +6,10 @@ import (
 	"golang-book-api/repository"
 )
 
+type APIKeyServiceInterface interface {
+	GenerateAndSaveAPIKey() (string, error)
+}
+
 type APIKeyService struct {
 	APIKeyRepo *repository.APIKeyRepository
 }

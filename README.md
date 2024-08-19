@@ -41,7 +41,6 @@ Before you start, ensure you have the following installed on your machine:
 ## Running The Project
    ```bash
    go run main.go
-
 ## API Endpoints
 Here are the available API endpoints:
 1. GET /books: List all books
