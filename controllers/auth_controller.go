@@ -38,7 +38,7 @@ func (c *AuthController) Register(w http.ResponseWriter, r *http.Request) {
 
 func (c *AuthController) Login(w http.ResponseWriter, r *http.Request) {
 	var data struct {
-		Username string `json:"username"`
+		Email string `json:"email"`
 		Password string `json:"password"`
 	}
 
@@ -47,7 +47,7 @@ func (c *AuthController) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := c.authService.Login(data.Username, data.Password)
+	user, err := c.authService.Login(data.Email, data.Password)
 	if err != nil {
 		helpers.RespondError(w, http.StatusUnauthorized, err.Error())
 		return

@@ -36,8 +36,8 @@ func (s *AuthService) Register(username, password, email string) (*models.User, 
 	return user, nil
 }
 
-func (s *AuthService) Login(username, password string) (*models.User, error) {
-	user, err := s.repo.GetUserByUsername(username)
+func (s *AuthService) Login(email, password string) (*models.User, error) {
+	user, err := s.repo.GetUserByEmail(email)
 	if err != nil {
 		return nil, err
 	}

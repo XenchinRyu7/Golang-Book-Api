@@ -2,7 +2,6 @@ package repository
 
 import (
 	"database/sql"
-	// "github.com/google/uuid"
 	"golang-book-api/models"
 )
 
@@ -20,10 +19,10 @@ func (repo *AuthRepository) CreateUser(user *models.User) error {
 	return err
 }
 
-func (repo *AuthRepository) GetUserByUsername(username string) (*models.User, error) {
+func (repo *AuthRepository) GetUserByEmail(email string) (*models.User, error) {
 	var user models.User
-	query := "SELECT id, username, password, email FROM users WHERE username = ?"
-	err := repo.db.QueryRow(query, username).Scan(&user.ID, &user.Username, &user.Password, &user.Email)
+	query := "SELECT id, username, password, email FROM users WHERE email = ?"
+	err := repo.db.QueryRow(query, email).Scan(&user.ID, &user.Username, &user.Password, &user.Email)
 	if err != nil {
 		return nil, err
 	}

@@ -43,6 +43,10 @@ func main() {
 	bookController := controllers.NewBookController(bookService)
 	apiKeyController := controllers.NewAPIKeyController(apiKeyService)
 
+	authRepo := repository.NewAuthRepository(db)
+	authService := services.NewAuthService(authRepo)
+	authController := controllers.NewAuthController(authService)
+
 	// Migrate Database
 	driver, err := mysql.WithInstance(db, &mysql.Config{})
 	if err != nil {
@@ -64,7 +68,7 @@ func main() {
 	seedData(db)
 
 	// Setup Router
-	r := router.SetupRouter(bookController, apiKeyController, apiKeyRepo)
+	r := router.SetupRouter(bookController, apiKeyController, apiKeyRepo, authController)
 
 	log.Println("Server is running on port 8080")
 	http.ListenAndServe(":8080", r)
