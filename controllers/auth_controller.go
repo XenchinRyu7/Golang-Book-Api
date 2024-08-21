@@ -29,7 +29,7 @@ func (c *AuthController) Register(w http.ResponseWriter, r *http.Request) {
 
 	user, err := c.authService.Register(data.Username, data.Password, data.Email)
 	if err != nil {
-		helpers.RespondError(w, http.StatusInternalServerError, err.Error())
+		helpers.RespondError(w, http.StatusInternalServerError, "Register Gagal")
 		return
 	}
 
@@ -38,7 +38,7 @@ func (c *AuthController) Register(w http.ResponseWriter, r *http.Request) {
 
 func (c *AuthController) Login(w http.ResponseWriter, r *http.Request) {
 	var data struct {
-		Email string `json:"email"`
+		Email    string `json:"email"`
 		Password string `json:"password"`
 	}
 
@@ -49,7 +49,15 @@ func (c *AuthController) Login(w http.ResponseWriter, r *http.Request) {
 
 	user, err := c.authService.Login(data.Email, data.Password)
 	if err != nil {
-		helpers.RespondError(w, http.StatusUnauthorized, err.Error())
+		if err.Error() == "email tidak ditemukan" {
+			helpers.RespondError(w, http.StatusNotFound, err.Error())
+			return
+		}
+		if err.Error() == "password salah" {
+			helpers.RespondError(w, http.StatusUnauthorized, err.Error())
+			return
+		}
+		helpers.RespondError(w, http.StatusInternalServerError, "Login Gagal")
 		return
 	}
 
